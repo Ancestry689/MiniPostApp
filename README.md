@@ -94,6 +94,7 @@ npm install cors
 npm install mysql
 npm install bcryptjs
 npm install jsonwebtoken
+npm install body-parser
 ```
 3. **启动服务器**：
 ```bash

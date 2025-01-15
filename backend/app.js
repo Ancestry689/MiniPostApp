@@ -152,7 +152,13 @@ app.post('/upload-avatar', upload.single('avatar'), (req, res) => {
 
     const filePath = req.file.path; // 上传文件的临时路径
     const fileName = `${userId}_${Date.now()}${path.extname(req.file.originalname)}`; // 生成唯一文件名
-    const newFilePath = path.join('uploads/avatars', fileName);
+    const uploadDir = path.join('uploads', 'avatars'); // 目标文件夹路径
+    const newFilePath = path.join(uploadDir, fileName);
+    
+    // 检查目标文件夹是否存在，如果不存在则创建
+    if (!fs.existsSync(uploadDir)) {
+        fs.mkdirSync(uploadDir, { recursive: true }); // 递归创建文件夹
+    }
 
     // 查询用户的旧头像路径
     const getOldAvatarSql = 'SELECT avatar_path FROM users WHERE id = ?';
@@ -177,6 +183,7 @@ app.post('/upload-avatar', upload.single('avatar'), (req, res) => {
                 }
 
                 // 删除旧头像文件
+                console.log(oldAvatarPath)
                 if (oldAvatarPath) {
                     fs.unlink(oldAvatarPath, (err) => {
                         if (err) {
@@ -275,7 +282,13 @@ app.post('/posts', upload.array('images'), (req, res) => {
             
                 const filePath = file.path; // 上传文件的临时路径
                 const fileName = `${postId}_${Date.now()}_${Math.floor(Math.random() * 10000)}${path.extname(file.originalname)}`; // 生成唯一文件名
-                const newFilePath = path.join('uploads/posts', fileName);
+                const uploadDir = path.join('uploads', 'posts'); // 目标文件夹路径
+                const newFilePath = path.join(uploadDir, fileName);
+                
+                // 检查目标文件夹是否存在，如果不存在则创建
+                if (!fs.existsSync(uploadDir)) {
+                    fs.mkdirSync(uploadDir, { recursive: true }); // 递归创建文件夹
+                }
 
                 // 将文件移动到永久存储路径
                 return new Promise((resolve, reject) => {
@@ -340,6 +353,7 @@ app.get('/posts', (req, res) => {
         FROM posts p
         LEFT JOIN post_images pi ON p.id = pi.post_id
         GROUP BY p.id
+        ORDER BY p.created_at DESC
         LIMIT ? OFFSET ?
     `;
 

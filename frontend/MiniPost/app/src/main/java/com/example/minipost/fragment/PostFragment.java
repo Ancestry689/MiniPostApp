@@ -171,6 +171,7 @@ public class PostFragment extends Fragment {
             public void onResponse(Call<PostResponse> call, Response<PostResponse> response) {
                 if (response.isSuccessful()) {
                     Toast.makeText(getContext(), "发布成功", Toast.LENGTH_SHORT).show();
+                    clearForm(); // 清空图片、标题和正文栏
                 } else {
                     Toast.makeText(getContext(), "发布失败", Toast.LENGTH_SHORT).show();
                 }
@@ -182,4 +183,18 @@ public class PostFragment extends Fragment {
             }
         });
     }
+
+    // 清空图片、标题和正文栏
+    private void clearForm() {
+        // 清空标题
+        titleEditText.setText("");
+
+        // 清空正文
+        contentEditText.setText("");
+
+        // 清空图片
+        selectedImages.clear(); // 清空图片列表
+        imageContainer.removeAllViews(); // 移除图片预览
+    }
+
 }

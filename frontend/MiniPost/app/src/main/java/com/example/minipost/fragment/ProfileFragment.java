@@ -224,7 +224,7 @@ public class ProfileFragment extends Fragment {
                             .skipMemoryCache(true) // 禁用内存缓存
                             .into(profileAvatar);
                 } else {
-                    Toast.makeText(getContext(), "头像加载失败", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "暂无头像", Toast.LENGTH_SHORT).show();
                 }
             }
 
